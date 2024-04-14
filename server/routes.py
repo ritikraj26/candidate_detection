@@ -12,13 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Flask
-from routes import app_routes
+from flask import Blueprint
+import requests
+from video_processing import start_video_processing, handle_motion
 
-app = Flask(__name__)
+app_routes = Blueprint('app_routes', __name__)
 
-app.register_blueprint(app_routes)
+@app_routes.route('/start-monitoring', methods=['GET'])
+def start_monitoring():
+    start_video_processing(handle_motion)
+    return 'Monitoring Started!', 200
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
+@app_routes.route('/process-image', methods=['POST'])
+def process_image():
+   pass
