@@ -12,22 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from flask import Flask
-from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
-from models import db
-from routes import app_routes
+db = SQLAlchemy()
 
-app = Flask(__name__)
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    organization = db.Column(db.String(100), nullable=True)
+    linkedin_url =  db.Column(db.String(100), nullable=False)
+    facial_encoding = db.Column(db.String(100), nullable=False)
 
-app.register_blueprint(app_routes)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db.init_app(app)
-migrate = Migrate(app,db)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    def __repr__(self):
+        return f'<Profile {self.name}>'

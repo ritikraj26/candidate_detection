@@ -12,3 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import cv2
+import nunmpy as np
+
+def detect_faces(image):
+    nparr = np.fromstring(image, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray_img, scaleFactor=1.1, minNeighbors=5)
+
+    face_data = []
+    for x, y, w, h in faces:
+        face_data.append({
+            'x': x,
+            'y': y,
+            'w': w,
+            'h': h
+        })
+
+    return face_data
